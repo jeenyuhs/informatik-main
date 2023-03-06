@@ -1,0 +1,167 @@
+{% extends "layout/base.html" %}
+{% block content %}
+<style>
+    input[type=number]::-webkit-inner-spin-button {
+        -webkit-appearance: none
+    }
+
+    select {
+        -moz-appearance: none;
+        -webkit-appearance: none;
+    }
+
+    .fixarrow:after {
+        content: '\f078';
+        right: 11px;
+        top: 6px;
+        height: 34px;
+    }
+</style>
+<div class="container mx-auto mt-12">
+    <form method="POST">
+        <div class="border-b border-gray-200 w-96 mx-auto ">
+            <ul class="flex flex-wrap justify-center font-medium text-center text-gray-700">
+                <li class="mr-2">
+                    <input type="button"
+                        class="inline-flex p-4 border-b-2 border-transparent rounded-t-lg active text-gray-900 font-bold"
+                        id="studieretning" value="Studieretning" />
+                </li>
+                <li class="mr-2">
+                    <input type="button" class="inline-flex p-4 border-b-2 border-transparent rounded-t-lg" id="valgfag"
+                        value="Valgfag">
+                </li>
+            </ul>
+        </div>
+
+        <div class="border border-gray-200 shadow-sm mt-6 w-2/3 rounded-lg mx-auto p-8">
+            <span class="text-xl font-medium">Post en ny anmeldelse.</span>
+            <div class="grid gap-4 sm:grid-cols-2 sm:gap-6 mt-6 items-center">
+                <div class="w-full">
+                    <label for="title" class="block mb-2 text-sm font-medium text-gray-900">Anmeldelse titel</label>
+                    <input type="text" name="title" id="title"
+                        class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 focus:outline-none block w-full p-2.5"
+                        placeholder="Skriv anmeldelsens titel" required="">
+                </div>
+                <div class="w-full">
+                    <label for="title" class="block mb-2 text-sm font-medium text-gray-900">Bedømmelse</label>
+                    <div class="flex text-md items-center">
+                        <i class="fa-solid fa-star text-yellow-400"></i>
+                        <p class="ml-2 text-sm font-medium text-gray-500 dark:text-gray-400">
+                            <input class="w-6 focus:outline-none" name="rating" placeholder="4.3"
+                                id="rating_validation" />
+                            out of 10
+                        </p>
+                    </div>
+                </div>
+                <div class="sm:col-span-2">
+                    <label for="content" class="block mb-2 text-sm font-medium text-gray-900 ">Anmeldelse</label>
+                    <textarea id="content" name="content" rows="8"
+                        class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 focus:outline-none"
+                        placeholder="Skriv din mening!" required></textarea>
+                </div>
+                <div class="sm:col-span-2">
+                    <label for="category_list" class="block mb-2 text-sm font-medium text-gray-900" id="category">Vælg
+                        studieretning</label>
+                    <select id="category_list"
+                        class="block w-auto pl-4 pr-4 pt-2 pb-2 shadow-sm border border-gray-200 bg-gray-50 rounded-md fixarrow"
+                        name="category" required>
+
+                    </select>
+                </div>
+                <button type="submit"
+                    class="items-center w-1/5 px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 hover:bg-blue-800">Post</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    const studieretninger = [
+        "Bioinformatik",
+        "Computer Science - Informatik",
+        "Computer Science - Programmering",
+        "Geoscience",
+        "Science Fysik",
+        "Science Kemi",
+        "Teknologi og Design",
+        "Teknologi og Samfundsfag",
+    ]
+
+    const valgfag = [
+        "Astronomi",
+        "Biologi",
+        "Design",
+        "Engelsk",
+        "Erhversøkonomi",
+        "Filosofi",
+        "Fransk",
+        "Fysik",
+        "Idræt",
+        "Informatik",
+        "Innovation",
+        "Kemi",
+        "Kommunikation og IT",
+        "Matematik",
+        "Mediefag",
+        "Musik",
+        "Programmering",
+        "Psykologi",
+        "Retorik",
+        "Samfundsfag",
+        "Statik og Styrkelære",
+        "Statistik",
+        "Teknologi",
+        "Tysk"
+    ]
+
+    for (var i = 0; i < studieretninger.length; i++) {
+        $("#category_list").append($("<option>", {
+            value: i,
+            text: studieretninger[i]
+        }));
+    }
+
+    $("#studieretning").click(() => {
+        // `active` is only a placeholder for the active type
+        if ($("#valgfag").hasClass("active")) {
+            $("#valgfag").removeClass("active text-gray-900 font-bold")
+        }
+        $("#studieretning").addClass("text-gray-900 font-bold active")
+        $("#category").text("Vælg studieretning")
+        $("#category_list").empty()
+        for (var i = 0; i < studieretninger.length; i++) {
+            $("#category_list").append($("<option>", {
+                value: i,
+                text: studieretninger[i]
+            }))
+        }
+    });
+    $("#valgfag").click(() => {
+        // `active` is only a placeholder for the active type
+        if ($("#studieretning").hasClass("active")) {
+            $("#studieretning").removeClass("active text-gray-900 font-bold")
+        }
+        $("#valgfag").addClass("text-gray-900 font-bold active")
+        $("#category").text("Vælg valgfag")
+        $("#category_list").empty()
+        for (var i = 0; i < valgfag.length; i++) {
+            $("#category_list").append($("<option>", {
+                value: i + studieretninger.length,
+                text: valgfag[i]
+            }))
+        }
+    });
+    $("#rating_validation").keydown((e) => {
+        if (e.key === "." && $("#rating_validation").val() == "") {
+            $("#rating_validation").val("0")
+        }
+
+        if (!isFinite(e.key) && e.key !== "." && e.keyCode !== 8 || e.key === " ")
+            e.preventDefault();
+
+        if ($("#rating_validation").val() > 10) {
+            e.preventDefault()
+            $("#rating_validation").val(10)
+        }
+    });
+</script>
+{% endblock %}

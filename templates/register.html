@@ -1,0 +1,116 @@
+{% extends "layout/base.html" %}
+{% block content %}
+<div class="container mx-auto max-w-xl mt-12">
+    <form method="POST">
+        <div class="border border-gray-200 shadow-sm p-12 rounded-lg">
+            <span class="text-3xl font-bold">Registrer</span>
+            {% if error %}
+            <p class="text-red-800 text-sm mt-2">{{ error }}</p>
+            {% endif %}
+            <div class="grid gap-4 sm:grid-cols-2 sm:gap-6 mt-6 items-center">
+                <div class="w-full">
+                    <label for="username" class="block mb-2 text-sm font-medium text-gray-900">Brugernavn</label>
+                    <input type="text" name="username" id="username"
+                        class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 focus:outline-none block w-full p-2.5"
+                        placeholder="kasperglobremboss" required="">
+                </div>
+                <div class="w-full">
+                    <label for="display" class="block mb-2 text-sm font-medium text-gray-900">Skærmnavn</label>
+                    <input type="text" name="display" id="display"
+                        class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 focus:outline-none block w-full p-2.5"
+                        placeholder="Kasper Glob Remboss" required="">
+                </div>
+                <div class="sm:col-span-2">
+                    <label for="password" class="block mb-2 text-sm font-medium text-gray-900">Kodeord</label>
+                    <input type="password" name="password" id="password"
+                        class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 focus:outline-none block w-full p-2.5"
+                        placeholder="kasper123glob123remboss" required="">
+                </div>
+                <div class="w-full">
+                    <label for="studieretning_list" class="block mb-2 text-sm font-medium text-gray-900"
+                        id="studieretning">Din udvalgte
+                        studieretning</label>
+                    <select id="studieretning_list"
+                        class="block  pl-4 pr-4 pt-2 pb-2 shadow-sm border w-full truncate border-gray-200 bg-gray-50 rounded-md"
+                        name="field_of_study" required>
+
+                    </select>
+                </div>
+                <div class="w-full">
+                    <label for="valgfag_list" class="block mb-2 text-sm font-medium text-gray-900" id="valgfag">Din
+                        udvalgte
+                        studieretning</label>
+                    <select id="valgfag_list"
+                        class="block w-full pl-4 pr-4 pt-2 pb-2 shadow-sm border border-gray-200 bg-gray-50 rounded-md"
+                        name="subject" required>
+
+                    </select>
+                </div>
+                <div class="sm:col-span-2">
+                    <label for="grade" class="block mb-2 text-sm font-medium text-gray-900">Klasse</label>
+                    <input type="text" name="grade" id="grade"
+                        class="bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 focus:outline-none block w-full p-2.5"
+                        placeholder="1.C" required="">
+                </div>
+                <button type="submit"
+                    class="text-white w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                    Registrer
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    const studieretninger = [
+        "Bioinformatik",
+        "Computer Science - Informatik",
+        "Computer Science - Programmering",
+        "Geoscience",
+        "Science Fysik",
+        "Science Kemi",
+        "Teknologi og Design",
+        "Teknologi og Samfundsfag",
+    ]
+
+    const valgfag = [
+        "Astronomi",
+        "Biologi",
+        "Design",
+        "Engelsk",
+        "Erhversøkonomi",
+        "Filosofi",
+        "Fransk",
+        "Fysik",
+        "Idræt",
+        "Informatik",
+        "Innovation",
+        "Kemi",
+        "Kommunikation og IT",
+        "Matematik",
+        "Mediefag",
+        "Musik",
+        "Programmering",
+        "Psykologi",
+        "Retorik",
+        "Samfundsfag",
+        "Statik og Styrkelære",
+        "Statistik",
+        "Teknologi",
+        "Tysk"
+    ]
+
+    for (var i = 0; i < studieretninger.length; i++) {
+        $("#studieretning_list").append($("<option>", {
+            value: i,
+            text: studieretninger[i]
+        }));
+    }
+
+    for (var i = 0; i < valgfag.length; i++) {
+        $("#valgfag_list").append($("<option>", {
+            value: i,
+            text: valgfag[i]
+        }));
+    }
+</script>
+{% endblock %}

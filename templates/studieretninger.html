@@ -1,0 +1,152 @@
+{% extends "layout/base.html" %}
+{% block content %}
+<div class="container mx-auto w-full mt-12 pl-12 pr-12">
+    <div class="flex items-center justify-between">
+        <span class="text-2xl font-bold text-gray-800">Studieretninger</span>
+        <div class="flex space-x-4">
+            <div class="block">
+                <label for="sort" class="block mb-2 text-gray-900 font-medium">Sorter efter</label>
+                <select class="block pl-4 pr-4 pt-2 pb-2 shadow-sm border border-gray-100 rounded-md" id="sort">
+                    <option selected>Nyeste</option>
+                    <option>Mest likede</option>
+                    <option>Mest kommenteret</option>
+                </select>
+            </div>
+            <div class="block">
+                <label for="filter" class="block mb-2 text-gray-900 font-medium">Filter</label>
+                <select class="block w-auto pl-4 pr-4 pt-2 pb-2 shadow-sm border border-gray-100 rounded-md"
+                    id="filter">
+                    <option selected>Alle</option>
+                    <option>Bioinformatik</option>
+                    <option>Computer Science - Informatik</option>
+                    <option>Computer Science - Programmering</option>
+                    <option>Geoscience</option>
+                    <option>Science Kemi</option>
+                    <option>Science Fysik</option>
+                    <option>Teknologi og Design</option>
+                    <option>Teknologi og Samfundsfag</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="w-full grid md:grid-cols-2 mt-10 gap-x-6 gap-y-4" id="reviews">
+        {% for review in reviews %}
+        <div class="flex items-center border justify-between border-gray-200 bg-gray-50 shadow-sm rounded-lg p-4">
+            <div class="flex">
+                <img class="w-12 h-12 rounded-full" src="static/avatars/{{ review.user.id }}.png" />
+                <div class=" block ml-4">
+                    <div class="flex items-center">
+                        <a class="font-bold mr-4 text-lg hover:underline" href="/review/{{ review.id }}">{{
+                            review.title}}</a>
+                        <div class="flex text-md items-center">
+                            <i class="fa-solid fa-star text-yellow-400"></i>
+                            <p class="ml-2 text-sm font-medium text-gray-500 dark:text-gray-400">
+                                {{ review.rating }} out of 10
+                            </p>
+                        </div>
+                        <span class="bg-blue-100 ml-4 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded ">{{
+                            review.field_of_study }}</span>
+                    </div>
+
+                    <p class="text-gray-600 max-w-md truncate">{{ review.content }}</p>
+                </div>
+            </div>
+            <div class="flex gap-x-6">
+                <form action="/like/{{ review.id }}" method="POST">
+                    <button type="submit" class="block items-center text-center">
+                        <span class="text-gray-400"><i class="fa-solid fa-heart"></i></span>
+                        <p class="text-gray-600">{{ review.hearts }}</p>
+                    </button>
+                </form>
+                <div class="block items-center text-center">
+                    <span class="text-gray-400"><i class="fa-solid fa-comments"></i></span>
+                    <p class="text-gray-600">{{ review.comments|length }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<script>
+    let r = {{ reviews| tojson | safe }}
+    $(document).ready(() => {
+        function redo_reviews(filter, sort) {
+            r.sort((x, y) => {
+                if (sort == "Nyeste") {
+                    return (x["posted"] < y["posted"]) ? 1 : ((x["posted"] > y["posted"]) ? -1 : 0)
+                } else if (sort == "Mest likede") {
+                    return (x["hearts"] < y["hearts"]) ? 1 : ((x["hearts"] > y["hearts"]) ? -1 : 0)
+                } else if (sort == "Mest kommenteret") {
+                    return (x["comments"].length < y["comments"].length) ? 1 : ((x["comments"].length > y["comments"].length) ? -1 : 0)
+                }
+            })
+
+            // jeg elsker javascript sååååå meget
+            t_r = r.filter(reviews => {
+                if (filter == "Alle")
+                    return r
+                if (filter == "Bioinformatik")
+                    return reviews.field_of_study == "Bioinformatik"
+                if (filter == "Computer Science - Informatik")
+                    return reviews.field_of_study == "Computer Science - Informatik"
+                if (filter == "Computer Science - Programmering")
+                    return reviews.field_of_study == "Computer Science - Programmering"
+                if (filter == "Geoscience")
+                    return reviews.field_of_study == "Geoscience"
+                if (filter == "Science Kemi")
+                    return reviews.field_of_study == "Science Kemi"
+                if (filter == "Science Fysik")
+                    return reviews.field_of_study == "Science Fysik"
+                if (filter == "Teknologi og Design")
+                    return reviews.field_of_study == "Teknologi og Design"
+                if (filter == "Teknologi og Samfundsfag")
+                    return reviews.field_of_study == "Teknologi og Samfundsfag"
+            }
+
+            )
+            $("#reviews").empty()
+            t_r.forEach(e => {
+                $("#reviews").append(
+                    '<div class="flex items-center border justify-between border-gray-200 bg-gray-50 shadow-sm rounded-lg p-4">' +
+                    ' <div class="flex">' +
+                    ' <img class="w-12 h-12 rounded-full" src="static/avatars/' + e.user.id + '.png" />' +
+                    ' <div class=" block ml-4">' +
+                    '<div class="flex items-center">' +
+                    '<a class="font-bold mr-4 text-lg hover:underline" href="/review/' + e.id + '">' + e.title + '</a>' +
+                    '<div class="flex text-md items-center">' +
+                    '<i class="fa-solid fa-star text-yellow-400"></i>' +
+                    '<p class="ml-2 text-sm font-medium text-gray-500 dark:text-gray-400">' +
+                    + e.rating + ' out of 10' +
+                    '</p>' +
+                    '</div>' +
+                    '<span class="bg-blue-100 ml-4 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded">' + e.field_of_study + '</span>' +
+                    '</div>' +
+                    '<p class="text-gray-600 max-w-md truncate">' + e.content + '</p>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="flex gap-x-6">' +
+                    ' <div class="block items-center text-center">' +
+                    '<span class="text-gray-400"><i class="fa-solid fa-heart"></i></span>' +
+                    '<p class="text-gray-600">' + e.hearts + '</p>' +
+                    '</div>' +
+                    '<div class="block items-center text-center">' +
+                    '<span class="text-gray-400"><i class="fa-solid fa-comments"></i></span>' +
+                    '<p class="text-gray-600">' + e.comments.length + '</p>' +
+                    ' </div>' +
+                    '</div>' +
+                    '</div>'
+                )
+            })
+
+        }
+
+        $("#filter").change(() => {
+            redo_reviews($("#filter").val(), $("#sort").val())
+        })
+
+        $("#sort").change(() => {
+            redo_reviews($("#filter").val(), $("#sort").val())
+        })
+    })
+</script>
+{% endblock %}

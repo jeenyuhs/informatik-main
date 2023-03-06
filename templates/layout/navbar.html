@@ -1,0 +1,74 @@
+{% block navbar %}
+<nav class="pt-4 pb-4 pl-4 pr-4 lg:pr-16 lg:pl-16 md:pr-8 md:pl-8 bg-blue-700 w-screen text-gray-200">
+    <div class="container mx-auto items justify-between hidden md:flex md:flex-wrap items-center">
+        <a class="text-lg font-[700]" href="/">SEE</a>
+        <div class="grow flex space-x-4 pl-4 md:pl-6 lg:pl-12 items-center">
+            <a href="/studieretninger" class="hover:duration-300 hover:text-white">
+                Studieretninger
+            </a>
+            <a href="/valgfag" class="hover:text-white hover:duration-300">
+                Valgfag
+            </a>
+        </div>
+        <div class="flex items-center">
+            {% if session.session.logged_in %}
+            <button data-dropdown-toggle="profile-menu" type="button"
+                class="flex items-center text-sm font-medium text-gray-300 rounded-full hover:text-gray-100 md:mr-0 focus:text-gray-100"
+                id="profile-menu-btn">
+
+                <img class="w-8 h-8 mr-2 rounded-full" src="../static/avatars/{{ session.session.id }}.png">
+                {{ session.session.display }}
+            </button>
+            <div class="hidden z-10 bg-gray-50 rounded-lg shadow w-44" id="profile-menu">
+                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200">
+                    <li>
+                        <a href="/reviews" class="inline-flex px-4 py-2 items-center hover:bg-gray-100 w-full">
+                            <i class="fa-solid fa-book mr-2"></i>
+                            Mine anmeldelser
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/indstillinger" class="inline-flex px-4 py-2 items-center hover:bg-gray-100 w-full">
+                            <i class="fa-solid fa-gear mr-2 "></i>
+                            Indstillinger
+                        </a>
+                    </li>
+                </ul>
+                <div class="py-2">
+                    <form action="/logout" method="POST">
+                        <button type="submit"
+                            class="px-4 w-full inline-flex items-center py-2 text-sm text-gray-700 hover:bg-gray-100 ">
+                            <i class="fa-solid fa-right-from-bracket mr-3"></i>
+                            Log ud
+                        </button>
+                    </form>
+                </div>
+                {% else %}
+                <a href="/login"
+                    class="flex items-center text-sm font-medium text-gray-300 rounded-full hover:text-gray-100 md:mr-0 focus:text-gray-100">
+                    <i class="fa-solid fa-user"></i>
+                </a>
+                {% endif %}
+            </div>
+            <!-- {% if not session.session.logged_in %}
+            <a href="/login">Login</a>
+            {% else %}
+            <a href="/opret" class="mr-4">Opret anmeldelse</a>
+            <form action="/logout" method="POST"><button type="submit" class="bg-none">Log ud</button></form>
+            {% endif %} -->
+        </div>
+    </div>
+    <div class="block md:hidden">
+        <button data-dropdown-toggle="navbar-multi-level" aria-controls="navbar-multi-level" aria-expanded="false"
+            type="button">
+            <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd"
+                    d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                    clip-rule="evenodd"></path>
+            </svg>
+        </button>
+    </div>
+    <div id="navbar-multi-level" class="hidden">pikpikpik</div>
+</nav>
+{% endblock %}

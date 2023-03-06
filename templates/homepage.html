@@ -1,0 +1,42 @@
+{% extends "layout/base.html" %}
+{% block content %}
+<div class="container mx-auto w-full mt-12 pl-12 pr-12">
+    <span class="text-2xl font-bold text-gray-800">Studieretninger & Valgfag</span>
+    <div class="w-full grid md:grid-cols-2 mt-10 gap-x-6">
+        {% for review in reviews %}
+        <div class="flex items-center border justify-between border-gray-200 bg-gray-50 shadow-sm rounded-lg p-4">
+            <div class="flex">
+                <img class="w-12 h-12 rounded-full" src="static/avatars/{{ review.user.id }}.png" />
+                <div class=" block ml-4">
+                    <div class="flex items-center">
+                        <a class="font-bold mr-4 text-lg hover:underline" href="/review/{{ review.id }}">{{ review.title
+                            }}</a>
+                        <div class="flex text-md items-center">
+                            <i class="fa-solid fa-star text-yellow-400"></i>
+                            <p class="ml-2 text-sm font-medium text-gray-500 dark:text-gray-400">
+                                {{ review.rating }} out of 10
+                            </p>
+                        </div>
+                        <span class="bg-blue-100 ml-4 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded ">{{
+                            review.field_of_study }}</span>
+                    </div>
+                    <p class="text-gray-600 max-w-md truncate">{{ review.content }}</p>
+                </div>
+            </div>
+            <div class="flex gap-x-6 gap-y-4">
+                <form action="/like/{{ review.id }}" method="POST">
+                    <button type="submit" class="block items-center text-center">
+                        <span class="text-gray-400"><i class="fa-solid fa-heart"></i></span>
+                        <p class="text-gray-600">{{ review.hearts }}</p>
+                    </button>
+                </form>
+                <div class="block items-center text-center">
+                    <span class="text-gray-400"><i class="fa-solid fa-comments"></i></span>
+                    <p class="text-gray-600">{{ review.comments|length }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

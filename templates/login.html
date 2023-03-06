@@ -1,0 +1,33 @@
+{% extends "layout/base.html" %}
+{% block content %}
+<div class="container mx-auto max-w-md mt-12">
+    <form action="/login" method="POST">
+        <div class="border border-gray-200 shadow-sm p-12 rounded-lg">
+            <span class="text-3xl font-bold">Velkommen tilbage.</span>
+            {% if error %}
+            <p class="text-red-800 text-sm mt-2">{{ error }}</p>
+            {% endif %}
+            <div class="mb-6 mt-4">
+                <label for="username"
+                    class="block mb-2 text-sm font-medium {% if error %}text-red-700{% else %}text-gray-900{% endif %}">Brugernavn</label>
+                <input type="text" name="username"
+                    class="bg-gray-50 border {% if error %}border-red-500{% else %}border-gray-300{% endif %} {% if error %}text-red-700{% else %}text-gray-900{% endif %} text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                    placeholder="Dit brugernavn" required>
+            </div>
+            <div class="mb-6">
+                <label for="password"
+                    class="block mb-2 text-sm font-medium {% if error %}text-red-700{% else %}text-gray-900{% endif %}">Your
+                    password</label>
+                <input type="password" name="password"
+                    class="bg-gray-50 border {% if error %}border-red-500{% else %}border-gray-300{% endif %} {% if error %}text-red-700{% else %}text-gray-900{% endif %} text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                    required placeholder="Dit kodeord">
+            </div>
+            <button type="submit"
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Log
+                ind</button>
+
+            <a href="/register" class="text-sm block mt-2 text-blue-600">Registrer</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
